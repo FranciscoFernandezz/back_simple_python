@@ -1,0 +1,70 @@
+@url_base=http://localhost:8000
+@user={{url_base}}/user
+@materia={{url_base}}/materias
+@usuario_materia={{url_base}}/usuario_materia
+@login={{url_base}}/login
+@access_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJsdWNhcy5hbWFkb0BleGFtcGxlLmNvbSIsImV4cCI6MTc1NzA1NTAyMX0.6dM_w9M6P-X9PpTriIDAUlBYvlSOsH3TZJc-tltVQQw
+
+### LOGIN (obtenés el token)
+POST {{login}}
+Content-Type: application/x-www-form-urlencoded
+
+username=francisco.fernandez@example.com
+&password=1234
+
+### CREAR USUARIO (profe o alumno)
+POST {{user}}
+Content-Type: application/json
+
+{
+    "nombre": "lucas",
+    "apellido": "amado",
+    "mail": "lucas.amado@example.com",
+    "contrasena": "1234",
+    "is_profe": true,
+    "dni": "11111111"
+}
+
+
+### CREAR MATERIA (solo profesor, requiere token)
+POST {{materia}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "nombre_materia": "Matematica"
+}
+
+### LISTAR TODAS LAS MATERIAS
+GET {{materia}}
+
+### OBTENER MATERIA POR ID
+GET {{materia}}/1
+
+
+###ACTUALIZAR MATERIA (solo profesor)
+PUT {{materia}}/1
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "nombre_materia": "Fisica"
+}
+
+### ELIMINAR MATERIA (solo profesor)
+DELETE {{materia}}/1
+Authorization: Bearer {{access_token}}
+
+### ASIGNAR MATERIA A USUARIO (solo profesor)
+POST {{usuario_materia}}
+Authorization: Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "id_usuario": 3,
+    "id_materia": 2
+}
+
+### LISTAR MATERIAS DE UN USUARIO (protegido)
+GET {{url_base}}/usuario/3/materias
+Authorization: Bearer {{access_token}}
